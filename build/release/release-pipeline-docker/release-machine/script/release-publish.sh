@@ -126,6 +126,11 @@ if [[ "$RELEASE_STEP" == "publish-rc" ]]; then
      git tag --delete kylin-"${RELEASE_VERSION}"
   fi
 
+  git reset --hard HEAD~4
+  git pull -r origin "$GIT_BRANCH"
+  mvn clean
+  # mvn release:clean
+
   ## Prepare tag & source tarball & upload maven artifact
   # Use release-plugin to check license & build source package & build and upload maven artifact
   # https://maven.apache.org/maven-release/maven-release-plugin/examples/prepare-release.html
@@ -141,7 +146,7 @@ if [[ "$RELEASE_STEP" == "publish-rc" ]]; then
 
   # Create a directory for this release candidate
   mkdir -p ${release_candidate_folder}
-  # rm -rf target/apache-kylin-*ource-release.zip.asc.sha256
+  rm -rf target/apache-kylin-*ource-release.zip.asc.sha256
 
   # Move source code and signture of source code to release candidate directory
   cp target/apache-kylin-*source-release.zip* "${release_candidate_folder}"
